@@ -17,6 +17,11 @@ import org.bukkit.plugin.Plugin;
 
 import com.google.gson.Gson;
 
+/*
+ * SpaceIOMetrics main class by Linus122
+ * version: 0.02
+ * 
+ */
 public class Metrics {
 	private Plugin pl;
 	private final Gson gson = new Gson();
