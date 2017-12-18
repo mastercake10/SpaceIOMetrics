@@ -17,9 +17,10 @@ import org.bukkit.plugin.Plugin;
 
 import com.google.gson.Gson;
 
+
 /*
  * SpaceIOMetrics main class by Linus122
- * version: 0.03
+ * version: 0.04
  * 
  */
 public class Metrics {
@@ -95,6 +96,13 @@ public class Metrics {
 		data.osArch = System.getProperty("os.arch");
 		data.osVersion = System.getProperty("os.version");
 		
+		String executableName = new java.io.File(Metrics.class.getProtectionDomain()
+				  .getCodeSource()
+				  .getLocation()
+				  .getPath())
+				.getName();
+		data.executableName = executableName;
+		
 		data.diskSize = new File("/").getTotalSpace();
 		
 		if(data.osName.equals("Linux")){
@@ -166,6 +174,7 @@ class Data {
 	int coreCnt;
 	String javaRuntime;
 	
+	String executableName;
 	boolean onlineMode;
 	
 	String osName;
