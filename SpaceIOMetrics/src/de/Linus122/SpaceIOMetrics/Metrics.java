@@ -20,14 +20,14 @@ import com.google.gson.Gson;
 
 /*
  * SpaceIOMetrics main class by Linus122
- * version: 0.04
+ * version: 0.05
  * 
  */
 public class Metrics {
 	private Plugin pl;
 	private final Gson gson = new Gson();
 	
-	private String URL = "https://spaceio.de/update/%s";
+	private String URL = "https://spaceio.xyz/update/%s";
 	private final String VERSION = "0.03";
 	private int REFRESH_INTERVAL = 600000;
 	
