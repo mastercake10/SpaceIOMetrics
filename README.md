@@ -7,4 +7,4 @@
 SpaceIO offers a great and simplistic solution for collecting statistics for all of your plugins.
 In addition, it supports image files!
 # Example:
-![alt text](https://spaceio.xyz/plugin/TimeIsMoney/toimg)
+![servers down](https://spaceio.xyz/plugin/TimeIsMoney/toimg)
