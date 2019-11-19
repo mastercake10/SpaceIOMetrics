@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 
 /*
  * SpaceIOMetrics main class by Linus122
- * version: 0.06
+ * version: 0.07
  * 
  */
 
@@ -29,7 +29,7 @@ public class Metrics {
 	private final Gson gson = new Gson();
 	
 	private String URL = "https://spaceio.xyz/update/%s";
-	private final String VERSION = "0.06";
+	private final String VERSION = "0.07";
 	private int REFRESH_INTERVAL = 600000;
 	
 	public Metrics(Plugin pl){
@@ -104,8 +104,6 @@ public class Metrics {
 				.getName();
 		data.executableName = executableName;
 		
-		data.diskSize = new File("/").getTotalSpace();
-		
 		if(data.osName.equals("Linux")){
 			data.linuxDistro = getDistro();
 		}
@@ -175,7 +173,6 @@ class Data {
 	public List<String> pluginAuthors;
 	String serverVersion;
 	
-	long diskSize;
 	int coreCnt;
 	String javaRuntime;
 	
