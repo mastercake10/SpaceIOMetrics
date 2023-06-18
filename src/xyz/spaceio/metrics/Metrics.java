@@ -1,4 +1,4 @@
-package de.Linus122.SpaceIOMetrics;
+package xyz.spaceio.metrics;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 
 /*
  * SpaceIOMetrics main class by Linus122
- * version: 0.07
+ * version: 0.08
  * 
  */
 
@@ -29,7 +29,7 @@ public class Metrics {
 	private final Gson gson = new Gson();
 	
 	private String URL = "https://spaceio.xyz/update/%s";
-	private final String VERSION = "0.07";
+	private final String VERSION = "0.08";
 	private int REFRESH_INTERVAL = 600000;
 	
 	public Metrics(Plugin pl){
