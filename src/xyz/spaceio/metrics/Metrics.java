@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 
@@ -24,9 +25,9 @@ public class Metrics {
 	private final Gson gson = new Gson();
 	
 	private String URL = "https://spaceio.xyz/update/%s";
-	private final String VERSION = "0.08";
+	private final String VERSION = "0.9";
 	private int REFRESH_INTERVAL = 600000;
-	
+
 	public Metrics(Plugin plugin){
 		this.plugin = plugin;
 
@@ -45,21 +46,34 @@ public class Metrics {
 		this.URL = String.format(this.URL, plugin.getName());
 		
 		// fetching refresh interval first
-		plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+		Runnable fetchInterval = () -> {
 			String dataJson = collectData();
 			try{
 				this.REFRESH_INTERVAL = sendData(dataJson);
 			} catch(Exception ignored){}
-		}, 20L * 5);
-		
+		};
+
 		// executing repeating task, our main metrics updater
-		plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+		Runnable update = () -> {
 			String dataJson = collectData();
 			try{
 				sendData(dataJson);
-			}catch(Exception e){}
-			
-		}, 20L * (this.REFRESH_INTERVAL / 1000), 20L * (this.REFRESH_INTERVAL / 1000));
+			} catch(Exception e){}
+		};
+
+		if (Metrics.isFolia()) {
+			io.papermc.paper.threadedregions.scheduler.AsyncScheduler sched = plugin.getServer().getAsyncScheduler();
+			sched.runDelayed(plugin, t -> {
+				fetchInterval.run();
+			}, 5, TimeUnit.SECONDS);
+			sched.runAtFixedRate(plugin, t -> {
+				update.run();
+			}, this.REFRESH_INTERVAL / 1000, this.REFRESH_INTERVAL / 1000, TimeUnit.SECONDS);
+		} else {
+			plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, fetchInterval, 20L * 5);
+			plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, update, 20L * (this.REFRESH_INTERVAL / 1000), 20L * (this.REFRESH_INTERVAL / 1000));
+		}
+
 	}
 	private String collectData() {
 		Data data = new Data();
@@ -161,6 +175,15 @@ public class Metrics {
         	// Exception is thrown when something went wrong while obtaining the distribution name.
         }
 		return "unknown";    
+	}
+
+	private static boolean isFolia() {
+		try {
+			Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
 	}
 }
 class Data {
