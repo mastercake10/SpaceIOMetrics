@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 /*
  * SpaceIOMetrics main class by Linus122
- * version: 0.08
+ * version: 1.0
  * 
  */
 
@@ -24,8 +24,8 @@ public class Metrics {
 	private Plugin plugin;
 	private final Gson gson = new Gson();
 	
-	private String URL = "https://spaceio.xyz/update/%s";
-	private final String VERSION = "0.9";
+	private String URL = "https://metrics.spaceio.xyz/update/%s";
+	private final String VERSION = "1.0";
 	private int REFRESH_INTERVAL = 600000;
 
 	public Metrics(Plugin plugin){
@@ -138,8 +138,12 @@ public class Metrics {
 		return Integer.parseInt(con.getHeaderField("interval-millis"));
 	}
 	private String getVersion(){
-        String packageName = plugin.getServer().getClass().getPackage().getName();
-        return  packageName.substring(packageName.lastIndexOf('.') + 1);
+		try {
+			return plugin.getServer().getMinecraftVersion();
+		} catch (Exception e) {
+			String packageName = plugin.getServer().getClass().getPackage().getName();
+	        return packageName.substring(packageName.lastIndexOf('.') + 1);
+		}
 	}
 	// method source: http://www.jcgonzalez.com/linux-get-distro-from-java-examples
 	private String getDistro(){
